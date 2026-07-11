@@ -2,6 +2,37 @@
 
 Aplikasi **Sistem Pengajuan Transaksi Pengeluaran** merupakan aplikasi berbasis **Laravel 13** dan **Filament 4** yang digunakan untuk mengelola proses pengajuan biaya perusahaan secara digital, mulai dari pembuatan pengajuan, workflow approval bertingkat, pembayaran, monitoring budget, dashboard KPI hingga audit activity log.
 
+# Screenshot
+
+## Login
+
+![Login](docs/images/login.png)
+
+---
+
+## Dashboard
+
+![Dashboard](docs/images/dashboard.png)
+
+---
+
+## Daftar Pengajuan
+
+![Submission](docs/images/submission-list.png)
+
+---
+
+## Detail Pengajuan
+
+![Detail](docs/images/submission-detail.png)
+
+---
+
+## Activity Log
+
+![Activity](docs/images/activity-log.png)
+
+
 ---
 
 # Tech Stack
