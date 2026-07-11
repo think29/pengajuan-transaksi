@@ -10,6 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -110,7 +111,62 @@ class SubmissionsTable
                 ViewAction::make(),
 
                 EditAction::make()
-                    ->visible(fn ($record) => $record->status === 'draft'),
+                    ->visible(fn ($record) => $record->isDraft()),
+
+                Action::make('delete')
+
+                    ->label('Hapus Draft')
+
+                    ->icon('heroicon-o-trash')
+
+                    ->color('danger')
+
+                    ->requiresConfirmation()
+
+                    ->modalHeading('Hapus Draft')
+
+                    ->modalDescription(
+                        'Draft akan dihapus dan dipindahkan ke Trash.'
+                    )
+
+                    ->visible(fn ($record) =>
+
+                        $record->isDraft()
+
+                        && auth()->id() === $record->user_id
+
+                    )
+
+                    ->action(function ($record) {
+
+                        try {
+
+                            app(SubmissionService::class)
+                                ->delete($record);
+
+                            Notification::make()
+
+                                ->success()
+
+                                ->title('Draft berhasil dihapus.')
+
+                                ->send();
+
+                        } catch (\Throwable $e) {
+
+                            Notification::make()
+
+                                ->danger()
+
+                                ->title('Gagal')
+
+                                ->body($e->getMessage())
+
+                                ->send();
+
+                        }
+
+                    }),
 
                 // ==========================
                 // SUBMIT

@@ -352,7 +352,8 @@ class Submission extends Model
     {
         $prefix = 'SUB-' . now()->format('Ymd');
 
-        $last = self::whereDate('created_at', today())
+        $last = self::withTrashed()
+            ->whereDate('created_at', today())
             ->latest('id')
             ->first();
 

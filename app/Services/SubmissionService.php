@@ -32,10 +32,9 @@ class SubmissionService
                 );
             }
 
-            return Submission::create([
+            $submission = Submission::create([
 
-                'submission_number' =>
-                    Submission::generateSubmissionNumber(),
+                'submission_number' => Submission::generateSubmissionNumber(),
 
                 'user_id' => auth()->id(),
 
@@ -43,19 +42,15 @@ class SubmissionService
 
                 'budget_id' => $budget->id,
 
-                'submission_date' =>
-                    $data['submission_date'],
+                'submission_date' => $data['submission_date'],
 
                 'amount' => $data['amount'],
 
-                'description' =>
-                    $data['description'] ?? null,
+                'description' => $data['description'] ?? null,
 
-                'attachment' =>
-                    $data['attachment'] ?? null,
+                'attachment' => $data['attachment'] ?? null,
 
-                'status' =>
-                    Submission::STATUS_DRAFT,
+                'status' => Submission::STATUS_DRAFT,
 
                 'current_approval' => null,
 
@@ -144,31 +139,20 @@ class SubmissionService
 
     }
 
-    public function delete(
-        Submission $submission
-    ): void {
-
-        DB::transaction(function () use (
-            $submission
-        ) {
-
-            if (! $submission->isDraft()) {
-
-                throw new RuntimeException(
-                    'Hanya draft yang boleh dihapus.'
-                );
-
-            }
-
-            ActivityLogService::log(
-                'DELETE_SUBMISSION',
-                $submission,
-                'Menghapus draft ' . $submission->submission_number
+    public function delete(Submission $submission): void
+    {
+        if (! $submission->isDraft()) {
+            throw new RuntimeException(
+                'Hanya draft yang boleh dihapus.'
             );
+        }
 
-            $submission->delete();
+        $submission->delete();
 
-        });
-
+        ActivityLogService::log(
+            'DELETE_DRAFT',
+            $submission,
+            'Menghapus draft ' . $submission->submission_number
+        );
     }
 }
